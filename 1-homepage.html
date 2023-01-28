@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="holberton_school-icon/style.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js"></script>
 </head>
 <body>
 <!-- Header -->
@@ -99,34 +100,11 @@
     </div>
 </header>
 <main>
-    <!-- Section carousel pros-->
+    <!-- START SECTION QUOTES -->
     <div id="section__carousel" class="container-fluid p-4 bg-purple">
         <section id="carousel-controls" class="carousel slide">
-            <div class="w-100 carousel-inner text-white mt-5 mb-5">
-                <div class="carousel-item active bg-purple">
-                    <div class="d-flex flex-column flex-sm-row align-items-center justify-content-sm-center">
-                        <div class="d-flex justify-content-center">
-                            <img class="rounded-circle" src="images/profile_5.jpg" alt="profil testimonial" width="160px" height="160px">
-                        </div>
-                        <div class="section__carousel-paragraph font-size-large mt-3 ">
-                            <p>&laquo Those tutorials are concise and go straight to the point. I can't think of a better place to learn smiling. And it's so fun! &raquo</p>
-                            <p class="font-weight-bold mb-0">Person Name</p>
-                            <p class="font-italic">weather presenter</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="d-flex flex-column flex-sm-row align-items-center justify-content-sm-center">
-                        <div class="d-flex justify-content-center">
-                            <img class="rounded-circle" src="images/profile_5.jpg" alt="profil testimonial" width="160px" height="160px">
-                        </div>
-                        <div class="section__carousel-paragraph font-size-large mt-3">
-                            <p>&laquo Those tutorials are concise and go straight to the point. I can't think of a better place to learn smiling. And it's so fun! &raquo</p>
-                            <p class="font-weight-bold mb-0">Person Name</p>
-                            <p class="font-italic">weather presenter</p>
-                        </div>
-                    </div>
-                </div>
+            <div id="js-content-quotes" class="w-100 carousel-inner text-white mt-5 mb-5">
+                <div id="quotes-loader" class="loader bg-purple"></div>
             </div>
             <a class="carousel-control-prev" href="#carousel-controls" role="button" data-slide="prev">
                 <img src="images/arrow_white_left.png" alt="previous icon">
@@ -138,6 +116,8 @@
             </a>
         </section>
     </div>
+    <!-- END SECTION QUOTES -->
+
     <!-- Section carousel tutorials -->
     <div id="section__carousel-tutorials" class="container-fluid p-4 my-5">
         <h2 class="text-center">Most <strong>popular</strong> tutorials</h2>
