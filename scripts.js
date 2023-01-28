@@ -1,5 +1,6 @@
 const urlQuotes = "https://smileschool-api.hbtn.info/quotes";
 const urlTutorials = "https://smileschool-api.hbtn.info/popular-tutorials";
+const urlLatest = "https://smileschool-api.hbtn.info/latest-videos";
 
 function getSectionQuotes() {
     $('.loader').show();
@@ -22,8 +23,11 @@ function getSectionQuotes() {
 }
 
 function buildQuotes(position, image, text, name, title) {
+
+    const check_active = position === 0 ? 'active' : '';
+
     $("#js-content-quotes").append(
-        $("<div></div>").attr({class: `carousel-item ${position === 0 ? "active" : ""}`}).append(
+        $("<div></div>").attr({class: `carousel-item ${check_active}`}).append(
             $("<div></div").attr({class: "d-flex flex-column flex-sm-row align-items-center justify-content-sm-center"}).append(
                 $("<div></div>").attr({class: "d-flex justify-content-center"}).append(
                     $("<img>").attr({
@@ -50,9 +54,7 @@ function getSectionTutorials() {
         type: "GET",
         url: urlTutorials,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
-                buildTutorials(i, data[i].thumb_url, data[i].title, data[i]["sub-title"], data[i].author_pic_url, data[i].author, data[i].star, data[i].duration)
-            }
+            retrieveData(this.url, data);
         },
         error: function () {
             alert("Server Error");
@@ -64,12 +66,39 @@ function getSectionTutorials() {
     });
 }
 
-function buildTutorials(position, thumb_image, title, sub_title, author_image, author_name, stars, duration) {
+function getSectionLatest() {
+    $('.loader').show();
+    $.ajax({
+        type: "GET",
+        url: urlLatest,
+        success: function (data) {
+            retrieveData(this.url, data);
+        },
+        error: function () {
+            alert("Server Error");
+            console.log("Can't get values for section latest");
+        },
+        complete: function () {
+            $('.loader').hide();
+        }
+    });
+}
+
+function retrieveData(url, data) {
+    for (let i = 0; i < data.length; i++) {
+        buildVideos(url, i, data[i].thumb_url, data[i].title, data[i]["sub-title"], data[i].author_pic_url, data[i].author, data[i].star, data[i].duration)
+    }
+}
+
+
+function buildVideos(url, position, thumb_image, title, sub_title, author_image, author_name, stars, duration) {
 
     const html_stars = calculateStars(stars);
+    const check_id = url === urlTutorials ? '#js-content-tutorials' : '#js-content-latest';
+    const check_active = position === 0 ? 'active' : '';
 
-    $('#js-content-tutorials').append(
-        $('<div></div>').attr({class: `carousel-item ${position === 0 ? 'active' : ''}`}).append(
+    $(check_id).append(
+        $('<div></div>').attr({class: `carousel-item ${check_active}`}).append(
             $('<div></div>').attr({class: "d-flex mt-5 justify-content-center"}).append(
                 $('<div></div>').attr({class: "card border-0 fixed-size-card", style: "width: 18rem"}).append(
                     $('<img>').attr({
@@ -125,4 +154,5 @@ function calculateStars(number_stars) {
 $(function () {
     getSectionQuotes();
     getSectionTutorials();
+    getSectionLatest();
 })
