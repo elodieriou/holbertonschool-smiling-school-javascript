@@ -257,7 +257,7 @@ function retrieveDataForCourses(data) {
 
 function calculateNumberCourses(data) {
     const number = data.length;
-    const displayValue = number === 1 ? `${number} video` : `${number} videos`;
+    const displayValue = number === 1 || number === 0 ? `${number} video` : `${number} videos`;
     $('#js-number-videos').text(displayValue);
 }
 
