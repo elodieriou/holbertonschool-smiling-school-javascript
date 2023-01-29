@@ -3,6 +3,7 @@ const urlTutorials = "https://smileschool-api.hbtn.info/popular-tutorials";
 const urlLatest = "https://smileschool-api.hbtn.info/latest-videos";
 const urlCourses = "https://smileschool-api.hbtn.info/courses";
 
+/* *** SECTION QUOTES *** */
 function getSectionQuotes() {
     $('.loader').show();
     $.ajax({
@@ -10,7 +11,7 @@ function getSectionQuotes() {
         url: urlQuotes,
         success: function (data) {
             for (let i = 0; i < data.length; i++) {
-                buildQuotes(i, data[i].pic_url ,data[i].text, data[i].name, data[i].title);
+                buildQuote(i, data[i].pic_url ,data[i].text, data[i].name, data[i].title);
             }
         },
         error: function () {
@@ -23,7 +24,7 @@ function getSectionQuotes() {
     });
 }
 
-function buildQuotes(position, image, text, name, title) {
+function buildQuote(position, image, text, name, title) {
 
     const check_active = position === 0 ? 'active' : '';
 
@@ -48,6 +49,8 @@ function buildQuotes(position, image, text, name, title) {
         )
     );
 }
+
+/* *** SECTIONS TUTORIALS AND LATEST VIDEOS *** */
 
 function getSectionTutorials() {
     $('.loader').show();
@@ -87,12 +90,11 @@ function getSectionLatest() {
 
 function retrieveDataForCarousel(url, data) {
     for (let i = 0; i < data.length; i++) {
-        buildVideos(url, i, data[i].thumb_url, data[i].title, data[i]["sub-title"], data[i].author_pic_url, data[i].author, data[i].star, data[i].duration)
+        buildVideo(url, i, data[i].thumb_url, data[i].title, data[i]["sub-title"], data[i].author_pic_url, data[i].author, data[i].star, data[i].duration)
     }
 }
 
-
-function buildVideos(url, position, thumb_image, title, sub_title, author_image, author_name, stars, duration) {
+function buildVideo(url, position, thumb_image, title, sub_title, author_image, author_name, stars, duration) {
 
     const html_stars = calculateStars(stars);
     const check_id = url === urlTutorials ? '#js-content-tutorials' : '#js-content-latest';
@@ -151,6 +153,8 @@ function calculateStars(number_stars) {
     return html
 }
 
+/* *** SECTION FILTERS *** */
+
 function getSectionFilters() {
 
     $.ajax({
@@ -203,6 +207,21 @@ function buildDropdown(topics, sorts) {
     }
 }
 
+function onSearchBar() {
+    $('#js-search-input button').on("click keypress", function (event) {
+        event.preventDefault();
+        getSectionCourses();
+    })
+
+    // Handle when clear the text with the little 'x'
+    $('#js-search-input input').on("search", function (event) {
+        event.preventDefault();
+        getSectionCourses();
+    })
+}
+
+/* *** SECTION COURSES *** */
+
 function getSectionCourses() {
     $('.loader').show();
     const data = {
@@ -217,8 +236,8 @@ function getSectionCourses() {
         data: data,
         success: function (data) {
             $('#js-content-courses').empty();
-            calculateNumberCourses(data.courses);
-            retrieveDataForCourses(data.courses);
+            calculateNumberCourses(data["courses"]);
+            retrieveDataForCourses(data["courses"]);
         },
         error: function () {
             alert("Server Error");
@@ -232,14 +251,14 @@ function getSectionCourses() {
 
 function retrieveDataForCourses(data) {
     for (let i = 0; i < data.length; i++) {
-        buildCard(data[i].thumb_url, data[i].title, data[i]["sub-title"], data[i].author_pic_url, data[i].author, data[i].star, data[i].duration);
+        buildCard(data[i]["thumb_url"], data[i].title, data[i]["sub-title"], data[i]["author_pic_url"], data[i].author, data[i]["star"], data[i].duration);
     }
 }
 
 function calculateNumberCourses(data) {
     const number = data.length;
     const displayValue = number === 1 ? `${number} video` : `${number} videos`;
-    $('#js-number-videos').text(`${displayValue}`);
+    $('#js-number-videos').text(displayValue);
 }
 
 function buildCard(thumb_image, title, sub_title, author_image, author_name, stars, duration) {
@@ -288,4 +307,5 @@ $(function () {
     getSectionLatest();
     getSectionFilters();
     getSectionCourses();
+    onSearchBar();
 })
