@@ -89,8 +89,13 @@ function getSectionLatest() {
 }
 
 function retrieveDataForCarousel(url, data) {
-    for (let i = 0; i < data.length; i++) {
-        buildVideo(url, i, data[i].thumb_url, data[i].title, data[i]["sub-title"], data[i].author_pic_url, data[i].author, data[i].star, data[i].duration)
+    $.each(data, function(i, value) {
+        buildVideo(url, i, value.thumb_url, value.title, value["sub-title"], value.author_pic_url, value.author, value.star, value.duration);
+    });
+    while ($('#js-content-latest' + ' .carousel-item').length < 5) {
+        $.each(data, function(i, value) {
+            buildVideo(url, -1, value.thumb_url, value.title, value["sub-title"], value.author_pic_url, value.author, value.star, value.duration);
+        });
     }
 }
 
@@ -101,7 +106,7 @@ function buildVideo(url, position, thumb_image, title, sub_title, author_image, 
     const check_active = position === 0 ? 'active' : '';
 
     $(check_id).append(
-        $('<div></div>').attr({class: `carousel-item ${check_active}`}).append(
+        $('<div></div>').attr({class: `carousel-item ${check_active} col-12 col-sm-6 col-md-4 col-lg-3`}).append(
             $('<div></div>').attr({class: "d-flex mt-5 justify-content-center"}).append(
                 $('<div></div>').attr({class: "card border-0 fixed-size-card", style: "width: 18rem"}).append(
                     $('<img>').attr({
@@ -138,6 +143,27 @@ function buildVideo(url, position, thumb_image, title, sub_title, author_image, 
             )
         )
     );
+}
+
+function calculateSlide(e, check_id) {
+    const $e = $(e.relatedTarget);
+    const idx = $e.index();
+    const itemsPerSlide = 4;
+    const totalItems = $(check_id + ' .carousel-item').length;
+
+    if (idx >= totalItems-(itemsPerSlide-1)) {
+        const it = itemsPerSlide - (totalItems - idx);
+        for (let i=0; i<it; i++) {
+            // append slides to end
+            if (e.direction == "left") {
+                console.log("hello");
+                $(check_id + ' .carousel-item').eq(i).appendTo(check_id + ' .carousel-inner');
+            }
+            else {
+                $(check_id + ' .carousel-item').eq(0).appendTo(check_id + ' .carousel-inner');
+            }
+        }
+    }
 }
 
 function calculateStars(number_stars) {
@@ -308,4 +334,10 @@ $(function () {
     getSectionFilters();
     getSectionCourses();
     onSearchBar();
+    $('#carousel-tutorials').on('slide.bs.carousel', function (event) {
+        calculateSlide(event, '#carousel-tutorials');
+    });
+    $('#carousel-latest').on('slide.bs.carousel', function (event) {
+        calculateSlide(event, '#carousel-latest');
+    });
 })
