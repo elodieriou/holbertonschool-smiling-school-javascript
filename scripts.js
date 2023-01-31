@@ -89,13 +89,15 @@ function getSectionLatest() {
 }
 
 function retrieveDataForCarousel(url, data) {
-    $.each(data, function(i, value) {
-        buildVideo(url, i, value.thumb_url, value.title, value["sub-title"], value.author_pic_url, value.author, value.star, value.duration);
-    });
-    while ($('#js-content-latest' + ' .carousel-item').length < 5) {
-        $.each(data, function(i, value) {
-            buildVideo(url, -1, value.thumb_url, value.title, value["sub-title"], value.author_pic_url, value.author, value.star, value.duration);
-        });
+    for (let i = 0; i < data.length; i++) {
+        buildVideo(url, i, data[i].thumb_url, data[i].title, data[i]["sub-title"], data[i].author_pic_url, data[i].author, data[i].star, data[i].duration);
+    }
+
+    // Handle the carousel on section latest, because only 4 cards are in the API
+    if ($('#js-content-latest' + ' .carousel-item').length < 5) {
+        for (let i = 0; i < data.length; i++) {
+            buildVideo(this.url, -1, data[i].thumb_url, data[i].title, data[i]["sub-title"], data[i].author_pic_url, data[i].author, data[i].star, data[i].duration);
+        }
     }
 }
 
@@ -155,8 +157,7 @@ function calculateSlide(e, check_id) {
         const it = itemsPerSlide - (totalItems - idx);
         for (let i=0; i<it; i++) {
             // append slides to end
-            if (e.direction == "left") {
-                console.log("hello");
+            if (e.direction === "left") {
                 $(check_id + ' .carousel-item').eq(i).appendTo(check_id + ' .carousel-inner');
             }
             else {
